@@ -1,5 +1,5 @@
 import psutil
-from flask import Flask, render_template
+from flask import Flask, render_template,make_response
 
 app = Flask(__name__)
 
@@ -16,5 +16,11 @@ def current_temperature():
     return render_template('dashboard.html', temps=temps)
 
 
+@app.route('/health')
+def health():
+    response = make_response("Healthy", 200)
+    response.mimetype = "text/plain"
+    return response
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5001)

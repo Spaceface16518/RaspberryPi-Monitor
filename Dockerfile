@@ -1,11 +1,11 @@
-FROM python:3
+FROM python:3.8-slim-buster
 
 MAINTAINER Amrit Rathie
 
 WORKDIR /usr/src/app
 
 ADD requirements.txt .
-RUN pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt
 
 COPY . .
 
