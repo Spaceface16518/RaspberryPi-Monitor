@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 
 import psutil
 from bson import ObjectId
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 from flask_pymongo import PyMongo
 
 import db
@@ -46,8 +46,9 @@ def temperature_warnings():
 @app.route('/feeds/temperatures/')
 def all_temperatures():
     logs = mongo.db.temperatures.find({})
-    return render_template('temperature.xml', logs=logs, host=app.config['HOST_HOSTNAME'],
-                           description="Monitor all temperature logs")
+    return Response(render_template('temperature.xml', logs=logs, host=app.config['HOST_HOSTNAME'],
+                                    description="Monitor all temperature logs",
+                                    updated=mongo.db.temperatures.find_one({})['created']), mimetype="application/xml")
 
 
 if __name__ == '__main__':

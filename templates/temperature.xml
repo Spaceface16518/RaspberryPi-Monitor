@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
-    <channel>
-        <title>Temperature Monitor for {{ host }}</title>
-        <description>{{ description }}</description>
-        <link>{{ url_for('temperature') }}</link>
-        <copyright>2020 Amrit Rathie | All rights reserved</copyright>
-        <lastBuildDate>{{ last_build_date }}</lastBuildDate>
+<feed xmls="http://www.w3.org/2005/Atom" xml:lang="en">
+    <link href="{{ request.url }}" rel="self" type="application/atom+xml"></link>
+    <link href="{{ request.host_url }}" rel="alternate" type="text/html" hreflang="en"></link>
+    <title>Temperature Monitor for {{ host }}</title>
+    <subtitle>{{ description }}</subtitle>
+    <copyright>2020 Amrit Rathie | All rights reserved</copyright>
+    <updated>{{ updated }}</updated>
 
-        {% for log in logs %}
-            <item>
+
+    {% for log in logs %}
+        <entry>
+            {% if log.warning %}
+                {% set title = "Temperature Alert for " ~ host %}
+            {% else %}
+                {% set title = "Temperature Log for " ~ host %}
+            {% endif %}
+            <title>{{ title }}</title>
+            {% set alt_link = request.base_url ~ url_for('temperature', id=log._id) %}
+            <link{{ {'link': alt_link, 'rel':'alternate', 'type': 'text/html', 'title': title} | xmlattr }}></link>
+            <published>{{ log.created }}</published>
+            <id>{{ log._id }}</id>
+            <content{{ {'type': 'html', 'xml:base': alt_link} | xmlattr }}>
+                {% with temps=log.temps %}
+                    {% include 'content.html' %}
+                {% endwith %}
+            </content>
+            <summary type="html">
+                A sensor was read at {{ log.created }}.
+
                 {% if log.warning %}
-                    <title>Temperature Alert for {{ host }}</title>
-                {% else %}
-                    <title>Temperature Log for {{ host }}</title>
+                    This is a warning because the temperature from the sensor was found to be high or critical.
                 {% endif %}
-                <link>{{ url_for('temperature', _id=log._id) }}</link>
-                <guid isPermaLink="false">{{ log._id }}</guid>
-                <pubDate>{{ log.created }}</pubDate>
-                <description type="html">
-                    {% with temps=log.temps %}
-                        {% include 'content.html' %}
-                    {% endwith %}
-                </description>
-            </item>
-        {% endfor %}
-
-    </channel>
-</rss>
+            </summary>
+        </entry>
+    {% endfor %}
+</feed>
