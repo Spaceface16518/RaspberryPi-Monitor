@@ -27,7 +27,7 @@ def temperature():
         reading = Reading(psutil.sensors_temperatures())
         log = Log(reading)
         mongo.db.temperatures.insert_one(log)
-        return render_template('content.html', temps=reading)
+        return render_template('dashboard.html', temps=reading)
 
 
 def get_abs_url(url):
