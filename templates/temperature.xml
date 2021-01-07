@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>Temperature Monitor for {{ host }}</title>
+        <description>{{ description }}</description>
+                <link>{{ url_for('temperature') }}</link>
+        <copyright>2020 Amrit Rathie | All rights reserved</copyright>
+        <lastBuildDate>{{ last_build_date }}</lastBuildDate>
+
+        {% for log in logs %}
+            <item>
+                {% if log.warning %}
+                    <title>Temperature Alert for {{ host }}</title>
+                    <description>A sensor on {{ host }} reached a high and/or critical temperature.
+                    </description>
+                {% else %}
+                    <title>Temperature Log for {{ host }}</title>
+                    <description>A sensor on {{ host }} was read.</description>
+                {% endif %}
+                <link>{{ url_for('temperature', _id=log._id) }}</link>
+                <guid isPermaLink="false">{{ log._id }}</guid>
+                <pubDate>{{ log.created }}</pubDate>
+                <content type="html">
+                    {% with temps=log.temps %}
+                        {% include 'dashboard.html' %}
+                    {% endwith %}
+                </content>
+            </item>
+        {% endfor %}
+
+    </channel>
+</rss>

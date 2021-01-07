@@ -14,6 +14,8 @@ ul {
     grid-template-rows: auto 1fr;
     margin: 1em;
     padding: 6px;
+    border: solid var(--nord1);
+    border-radius: 6px;
 }
 
 
@@ -37,6 +39,7 @@ ul {
 .entry-label {
     grid-column: 1;
 }
+
 .entry-data {
     grid-column: 2;
 }
