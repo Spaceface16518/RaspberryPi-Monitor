@@ -1,37 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>RaspberryPi Monitor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preload" as="style" href="{{ url_for('static', filename='style.css') }}">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='sensor.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='nord.css') }}">
+    <title>RaspberryPi Temperature Monitor</title>
+    {% include "head.html" %}
 </head>
 <body>
 <main>
-    <div class="container">
-        {# TODO: check if temps exists #}
-        <ul class="sensors">
-            {% for name, entries in temps.items() %}
-                <li class="sensor">
-                    <h2 class="sensor-name">{{ name | e }}</h2>
-                    <ul class="sensor-entries">
-                        {% for entry in entries %}
-                            <li class="entry {% if 'high' in entry and entry.current >= entry.high or 'critical' in entry and entry.current >= entry.critical %} temp-warning {% endif %}">
-                                <h3 class="entry-label">{{ entry.label | d(name, true) }}</h3>
-                                <div class="entry-data">{{ entry.current }} °C <span
-                                        class="metadata">(high = {{ entry.high }} °C, critical = {{ entry.critical }} °C)</span>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include "content.html" %}
 </main>
 </body>
 </html>

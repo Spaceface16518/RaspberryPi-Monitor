@@ -3,7 +3,7 @@
     <channel>
         <title>Temperature Monitor for {{ host }}</title>
         <description>{{ description }}</description>
-                <link>{{ url_for('temperature') }}</link>
+        <link>{{ url_for('temperature') }}</link>
         <copyright>2020 Amrit Rathie | All rights reserved</copyright>
         <lastBuildDate>{{ last_build_date }}</lastBuildDate>
 
@@ -22,7 +22,7 @@
                 <pubDate>{{ log.created }}</pubDate>
                 <content type="html">
                     {% with temps=log.temps %}
-                        {% include 'dashboard.html' %}
+                        {% include 'content.html' %}
                     {% endwith %}
                 </content>
             </item>

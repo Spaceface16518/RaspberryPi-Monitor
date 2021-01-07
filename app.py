@@ -22,12 +22,12 @@ mongo = PyMongo(app)
 def temperature():
     if (_id := request.args.get('_id', type=ObjectId)) is not None:
         log = mongo.db.temperatures.find_one_or_404({'_id': _id})
-        return render_template('dashboard.html', temps=log['temps'])
+        return render_template('content.html', temps=log['temps'])
     else:
         reading = Reading(psutil.sensors_temperatures())
         log = Log(reading)
         mongo.db.temperatures.insert_one(log)
-        return render_template('dashboard.html', temps=reading)
+        return render_template('content.html', temps=reading)
 
 
 def get_abs_url(url):
